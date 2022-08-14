@@ -2,12 +2,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add(0, "Молоко");
-        list.add(1, "Хлеб");
-        list.add(2, "Сахар");
-        list.add(3, "Гречка с хлебом");
-        list.add(4, "Мука -Хлебная-");
         List<String> operation = new ArrayList<>();
         operation.add(0, "Список операций:");
         operation.add(1, "1. Добавить товар в список покупок.");
@@ -19,50 +13,39 @@ public class Main {
             System.out.println(s);
         }
         while (true) {
-            System.out.println("Выберите операцию или введи end для завершения:");
+            System.out.println("Выберите операцию или введите END для завершения:");
             System.out.println();
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine();
-            if (input.equals("end")) {
+            if (input.equals("END")) {
                 System.out.println("Вы завершили работу программы.");
                 break;
             }
-            if (Integer.parseInt(input) > 4 || Integer.parseInt(input) < 1) {
-                System.out.println("Вы ввели неверные данные!");
+            try {
+                if (Integer.parseInt(input) > 4 || Integer.parseInt(input) < 1) {
+                    inputException();
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                inputException();
                 continue;
             }
             if (Integer.parseInt(input) == 1) {
                 System.out.println("Какой товар ходите добавить в список покупок?");
-                for (String l : list) {
-                    System.out.println((list.indexOf(l) + 1) + ". " + l);
-                }
                 while (true) {
-                    int product = scanner.nextInt();
-                    if (product < 1 || product > 5) {
-                        System.out.println("Такого товара не существует!");
-                        continue;
-                    }
-                    product = product - 1;
-                    if (!basket.contains(list.get(product))) {
-                        basket.add(list.get(product));
-                    }
-                    System.out.println("Вы выбрали " + list.get(product));
+                    String product = scanner.nextLine();
+                    basket.add(product);
                     System.out.println("Итого в списке покупок: " + basket.size());
                     break;
                 }
             }
-
             if (Integer.parseInt(input) == 2) {
                 System.out.println("Ваш список покупок:");
-                for (String s : basket) {
-                    System.out.println((basket.indexOf(s) + 1) + ". " + s);
-                }
+                getBasket(basket);
             }
             if (Integer.parseInt(input) == 3) {
                 System.out.println("Ваш список покупок:");
-                for (String s : basket) {
-                    System.out.println((basket.indexOf(s) + 1) + ". " + s);
-                }
+                getBasket(basket);
                 System.out.println("Что хотите удалить? Введите номер или название.");
                 while (true) {
                     Scanner scan = new Scanner(System.in);
@@ -70,18 +53,14 @@ public class Main {
                         int number = scan.nextInt() - 1;
                         System.out.println("Вы удалили: " + basket.get(number) + ", теперь список покупок такой:");
                         basket.remove(number);
-                        for (String c : basket) {
-                            System.out.println((basket.indexOf(c) + 1) + ". " + c);
-                        }
+                        getBasket(basket);
                         break;
                     } else {
                         String name = scan.nextLine();
                         if (basket.contains(name)) {
                             System.out.println("Вы удалили: " + name + ", теперь список покупок такой:");
                             basket.remove(basket.indexOf(name));
-                            for (String c : basket) {
-                                System.out.println((basket.indexOf(c) + 1) + "." + c);
-                            }
+                            getBasket(basket);
                             break;
                         } else {
                             System.out.println("Такого товара нет в Вашем списке! Введите верное название!");
@@ -104,6 +83,16 @@ public class Main {
                     break;
                 }
             }
+        }
+    }
+
+    public static void inputException() {
+        System.out.println("Вы ввели неверные данные!");
+    }
+
+    public static void getBasket(List<String> basket) {
+        for (String c : basket) {
+            System.out.println((basket.indexOf(c) + 1) + ". " + c);
         }
     }
 }
